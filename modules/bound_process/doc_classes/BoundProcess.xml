@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="BoundProcess" inherits="RefCounted" version="4.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../doc/class.xsd">
+	<brief_description>
+		Represents a process that can have its stdin written to interactively.
+	</brief_description>
+	<description>
+		Starts a process, binding its stdin, stdout, and stderr to unix pipes. Byte arrays and lines can be written to its stdin, and read from its stdout and stderr.
+	</description>
+	<tutorials>
+	</tutorials>
+	<methods>
+		<method name="is_running">
+			<return type="bool" />
+			<description>
+				Returns true if the process is currently running.
+			</description>
+		</method>
+		<method name="kill_process">
+			<return type="void" />
+			<description>
+				Sends SIGTERM to the process, and closes its associated pipes.
+			</description>
+		</method>
+		<method name="read_bytes">
+			<return type="PackedByteArray" />
+			<param index="0" name="size" type="int" />
+			<param index="1" name="source" type="int" enum="BoundProcess.ReadSource" default="0" />
+			<param index="2" name="error" type="Array" default="[]" />
+			<description>
+				Read [param size] bytes from [param source]. If the requested number of bytes is not available to be read from the source, this function will block until they are.
+				Pass an [Array] as [param error] and the result will be appended to it, as shown:
+				[codeblock]
+				var result := Array.new()
+				bound_process.read_bytes(8, BoundProcess.READ_STDOUT, result)
+				if (result.back() != OK):
+				    # Handle error
+				[/codeblock]
+			</description>
+		</method>
+		<method name="read_line">
+			<return type="String" />
+			<param index="0" name="source" type="int" enum="BoundProcess.ReadSource" default="0" />
+			<param index="1" name="error" type="Array" default="[]" />
+			<description>
+				Read from [param source] as UTF-8 bytes up to a newline character. If the requested source does not contain a newline character, this function will block until it does. The output from this function will be stripped of whitespace and control characters from its beginning and end. If this is not desired, use [method BoundProcess.read_bytes] instead.
+				Pass an [Array] as [param error] and the result will be appended to it, as shown:
+				[codeblock]
+				var result := Array.new()
+				bound_process.read_line(BoundProcess.READ_STDOUT, result)
+				if (result.back() != OK):
+				    # Handle error
+				[/codeblock]
+			</description>
+		</method>
+		<method name="start" qualifiers="static">
+			<return type="BoundProcess" />
+			<param index="0" name="path" type="String" />
+			<param index="1" name="args" type="PackedStringArray" />
+			<description>
+				Creates a new process that runs alongside Godot. Unlike [method OS.create_process], it [b]will[/b] be sent SIGTERM when Godot exits. The path specified in [param path] must exist and be executable file or macOS .app bundle. Platform path resolution will be used. The [param arguments] are used in the given order and separated by a space.
+			</description>
+		</method>
+		<method name="write_bytes">
+			<return type="int" enum="Error" />
+			<param index="0" name="bytes" type="PackedByteArray" />
+			<description>
+				Writes [param bytes] to the process's stdin.
+			</description>
+		</method>
+		<method name="write_line">
+			<return type="int" enum="Error" />
+			<param index="0" name="line" type="String" />
+			<description>
+				Writes [param line] as UTF-8 bytes to the process's stdin. If [param line] does not end with a newline, one will be appended before writing. If this is not desired, use [method BoundProcess.write_bytes] (with [code]line.to_utf8_buffer()[/code]).
+			</description>
+		</method>
+	</methods>
+	<constants>
+		<constant name="READ_STDOUT" value="0" enum="ReadSource">
+			Read from the process's stdout.
+		</constant>
+		<constant name="READ_STDERR" value="1" enum="ReadSource">
+			Read from the process's stderr.
+		</constant>
+	</constants>
+</class>

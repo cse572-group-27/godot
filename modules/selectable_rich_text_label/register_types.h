@@ -1,0 +1,6 @@
+#pragma once
+
+#include "modules/register_module_types.h"
+
+void initialize_selectable_rich_text_label_module(ModuleInitializationLevel p_level);
+void uninitialize_selectable_rich_text_label_module(ModuleInitializationLevel p_level);

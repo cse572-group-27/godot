@@ -43,6 +43,10 @@
 #include "modules/svg/image_loader_svg.h"
 #endif
 
+#ifdef MODULE_SELECTABLE_RICH_TEXT_LABEL_ENABLED
+#include "modules/selectable_rich_text_label/selectable_rich_text_label.h"
+#endif
+
 static const int default_font_size = 16;
 
 static float scale = 1.0;
@@ -1115,6 +1119,51 @@ void fill_default_theme(Ref<Theme> &theme, const Ref<Font> &default_font, const 
 	theme->set_color("selection_fill", "GraphEdit", Color(1, 1, 1, 0.3));
 	theme->set_color("selection_stroke", "GraphEdit", Color(1, 1, 1, 0.8));
 	theme->set_color("activity", "GraphEdit", Color(1, 1, 1));
+
+	#ifdef MODULE_SELECTABLE_RICH_TEXT_LABEL_ENABLED
+
+	// SelectableRichTextLabel
+
+	theme->set_stylebox("focus", "SelectableRichTextLabel", focus);
+	theme->set_stylebox("normal", "SelectableRichTextLabel", make_empty_stylebox(0, 0, 0, 0));
+
+	theme->set_font("normal_font", "SelectableRichTextLabel", Ref<Font>());
+	theme->set_font("bold_font", "SelectableRichTextLabel", bold_font);
+	theme->set_font("italics_font", "SelectableRichTextLabel", italics_font);
+	theme->set_font("bold_italics_font", "SelectableRichTextLabel", bold_italics_font);
+	theme->set_font("mono_font", "SelectableRichTextLabel", Ref<Font>());
+	theme->set_font_size("normal_font_size", "SelectableRichTextLabel", -1);
+	theme->set_font_size("bold_font_size", "SelectableRichTextLabel", -1);
+	theme->set_font_size("italics_font_size", "SelectableRichTextLabel", -1);
+	theme->set_font_size("bold_italics_font_size", "SelectableRichTextLabel", -1);
+	theme->set_font_size("mono_font_size", "SelectableRichTextLabel", -1);
+
+	theme->set_color("default_color", "SelectableRichTextLabel", Color(1, 1, 1));
+	theme->set_color("font_selected_color", "SelectableRichTextLabel", Color(0, 0, 0, 0));
+	theme->set_color("selection_color", "SelectableRichTextLabel", Color(0.1, 0.1, 1, 0.8));
+
+	theme->set_color("font_shadow_color", "SelectableRichTextLabel", Color(0, 0, 0, 0));
+
+	theme->set_color("font_outline_color", "SelectableRichTextLabel", Color(1, 1, 1));
+
+	theme->set_constant("shadow_offset_x", "SelectableRichTextLabel", 1 * scale);
+	theme->set_constant("shadow_offset_y", "SelectableRichTextLabel", 1 * scale);
+	theme->set_constant("shadow_outline_size", "SelectableRichTextLabel", 1 * scale);
+
+	theme->set_constant("line_separation", "SelectableRichTextLabel", 0);
+	theme->set_constant("table_h_separation", "SelectableRichTextLabel", 3 * scale);
+	theme->set_constant("table_v_separation", "SelectableRichTextLabel", 3 * scale);
+
+	theme->set_constant("outline_size", "SelectableRichTextLabel", 0);
+
+	theme->set_color("table_odd_row_bg", "SelectableRichTextLabel", Color(0, 0, 0, 0));
+	theme->set_color("table_even_row_bg", "SelectableRichTextLabel", Color(0, 0, 0, 0));
+	theme->set_color("table_border", "SelectableRichTextLabel", Color(0, 0, 0, 0));
+
+	theme->set_constant("text_highlight_h_padding", "SelectableRichTextLabel", 3 * scale);
+	theme->set_constant("text_highlight_v_padding", "SelectableRichTextLabel", 3 * scale);
+	
+	#endif
 
 	// Visual Node Ports
 
